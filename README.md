@@ -1,3 +1,13 @@
+# 支持ESP32-P4-Function-EV-Board
+
+在menuconfig中将Board Type修改为ESP32-P4-Function-EV-Board
+
+![修改Board Type](docs/how_to_use_0.png)
+
+在menuconfig中将Wi-Fi Remote中choose slave target修改为esp32c6
+
+![choose slave target](docs/how_to_use_1.png)
+
 # 小智 AI 聊天机器人 （XiaoZhi AI Chatbot）
 
 （中文 | [English](README_en.md) | [日本語](README_ja.md)）
