@@ -156,6 +156,8 @@ choice BOARD_TYPE
         bool "无名科技星智1.54(ML307)"
     config BOARD_TYPE_SENSECAP_WATCHER
         bool "SenseCAP Watcher"
+    config BOARD_TYPE_ESP32P4_FUNCTION_EV_BOARD
+        bool "ESP32-P4-FUNCTION-EV-BOARD"
 endchoice
 
 choice DISPLAY_OLED_TYPE
@@ -224,6 +226,16 @@ choice DISPLAY_ESP32S3_KORVO2_V3
         bool "ILI9341, 分辨率240*320"
 endchoice
 
+choice DISPLAY_ESP32P4_FUNCTION_EV_BOARD
+    depends on BOARD_TYPE_ESP32P4_FUNCTION_EV_BOARD
+    prompt "ESP32P4_FUNCTION_EV_BOARD LCD Type"
+    default LCD_EK79007_1024X600
+    help
+        屏幕类型选择
+    config LCD_EK79007_1024X600
+        bool "EK79007, 分辨率1024*600"
+endchoice
+
 config USE_WECHAT_MESSAGE_STYLE
     bool "使用微信聊天界面风格"
     default n
@@ -233,14 +245,14 @@ config USE_WECHAT_MESSAGE_STYLE
 config USE_AUDIO_PROCESSOR
     bool "启用音频降噪、增益处理"
     default y
-    depends on IDF_TARGET_ESP32S3 && SPIRAM
+    depends on (IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4) && SPIRAM
     help
         需要 ESP32 S3 与 AFE 支持
 
 config USE_WAKE_WORD_DETECT
     bool "启用唤醒词检测"
     default y
-    depends on IDF_TARGET_ESP32S3 && SPIRAM
+    depends on (IDF_TARGET_ESP32S3 || IDF_TARGET_ESP32P4) && SPIRAM
     help
         需要 ESP32 S3 与 AFE 支持
 endmenu

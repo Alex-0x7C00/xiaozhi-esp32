@@ -1,0 +1,10 @@
+{
+    "target": "esp32p4",
+    "builds": [
+        {
+            "name": "ESP32-P4-Function-EV-Board",
+            "sdkconfig_append": [
+            ]
+        }
+    ]
+}

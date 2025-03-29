@@ -223,6 +223,71 @@ RgbLcdDisplay::RgbLcdDisplay(esp_lcd_panel_io_handle_t panel_io, esp_lcd_panel_h
     SetupUI();
 }
 
+
+MipiLcdDisplay::MipiLcdDisplay(esp_lcd_panel_io_handle_t panel_io, esp_lcd_panel_handle_t panel,
+    int width, int height, int offset_x, int offset_y,
+    bool mirror_x, bool mirror_y, bool swap_xy,
+    DisplayFonts fonts): LcdDisplay(panel_io, panel, fonts) {
+        width_ = width;
+        height_ = height;
+
+        ESP_LOGI(TAG, "Initialize LVGL library");
+        lv_init();
+    
+        ESP_LOGI(TAG, "Initialize LVGL port");
+        lvgl_port_cfg_t port_cfg = ESP_LVGL_PORT_INIT_CONFIG();
+        lvgl_port_init(&port_cfg);
+
+        const lvgl_port_display_cfg_t disp_cfg = {
+            .io_handle = panel_io_,
+            .panel_handle = panel_,
+            .control_handle = NULL,
+            .buffer_size = static_cast<uint32_t>(width * 50),
+            .double_buffer = false,
+            .hres = static_cast<uint32_t>(width_),
+            .vres = static_cast<uint32_t>(height_),
+            .monochrome = false,
+            .rotation = {
+                .swap_xy = false,
+                .mirror_x = true,
+                .mirror_y = true,
+            },
+            .color_format = LV_COLOR_FORMAT_RGB565,
+            .flags = {
+                .buff_dma = true,
+                .buff_spiram = true,
+                .sw_rotate = false,
+                .swap_bytes = 0,
+                .full_refresh = false,
+                .direct_mode = false,
+            }
+        };
+
+        lvgl_port_display_dsi_cfg_t dpi_cfg = {
+            .flags = {
+                    .avoid_tearing = false,
+                }
+            };
+
+        display_ = lvgl_port_add_disp_dsi(&disp_cfg, &dpi_cfg);
+        if (display_ == nullptr) {
+            ESP_LOGE(TAG, "Failed to add display");
+            return;
+        }
+
+        if (offset_x != 0 || offset_y != 0) {
+            lv_display_set_offset(display_, offset_x, offset_y);
+        }
+
+        if (current_theme_name_ == "dark") {
+            current_theme = DARK_THEME;
+        } else if (current_theme_name_ == "light") {
+            current_theme = LIGHT_THEME;
+        }
+
+        SetupUI();
+}
+
 LcdDisplay::~LcdDisplay() {
     // 然后再清理 LVGL 对象
     if (content_ != nullptr) {
