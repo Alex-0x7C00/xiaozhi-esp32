@@ -4,8 +4,8 @@
 #include <driver/gpio.h>
 #include <driver/uart.h>
 
-#define AUDIO_INPUT_SAMPLE_RATE  48000
-#define AUDIO_OUTPUT_SAMPLE_RATE 48000
+#define AUDIO_INPUT_SAMPLE_RATE  24000
+#define AUDIO_OUTPUT_SAMPLE_RATE 24000
 
 #define AUDIO_I2S_GPIO_MCLK GPIO_NUM_13
 #define AUDIO_I2S_GPIO_WS GPIO_NUM_10
